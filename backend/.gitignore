@@ -3,5 +3,9 @@
 
 # local env files
 /config/config.env
+/config/*.pem
 
 /public
+
+/.env
+
