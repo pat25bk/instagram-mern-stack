@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAllChats } from '../../actions/chatAction';
 import {Skeleton} from "@mui/material";
 import {toast} from "react-toastify";
+import { BASE_PROFILE_IMAGE_URL } from '../../utils/constants';
 // import Dialog from '@mui/material/Dialog';
 
 function SearchModal({open,onClose}) {
@@ -69,7 +70,7 @@ function SearchModal({open,onClose}) {
         }
     }
   return (
-    open&&<div className='w-screen h-screen bg-black bg-opacity-70 fixed top-0 left-0 flex justify-center items-center'
+    open&&<div className='w-screen h-screen bg-black bg-opacity-70 fixed  z-10 top-0 left-0 flex justify-center items-center'
     onClick={onClose}>
 
         <div className="w-[45%] h-[65%] bg-white rounded-xl py-3 flex flex-col space-y-2"
@@ -114,7 +115,7 @@ function SearchModal({open,onClose}) {
                 <div key={u._id} className="flex flex-row cursor-pointer hover:bg-gray-200 py-2 pl-3" 
                 onClick={()=>handleNewChat(u._id)}>
                 <div className="w-[40px] h-[40px]">
-                    <img className="rounded-full object-cover border border-gray-200" src={u.avatar} alt="avatar" />
+                    <img className="rounded-full object-cover border border-gray-200" src={BASE_PROFILE_IMAGE_URL+u.avatar} alt="avatar" />
                 </div>
                 <div className="pl-3 text-left">
                     <div className="text-sm">{u.name}</div>

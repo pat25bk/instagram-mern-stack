@@ -1,10 +1,18 @@
-export const BASE_PROFILE_IMAGE_URL='http://localhost:4000/public/uploads/profiles/';
-export const BASE_POST_IMAGE_URL='http://localhost:4000/public/uploads/posts/';
+const AWS_S3=true;
+
+let BASE_PROFILE_IMAGE_URL='http://localhost:4000/public/uploads/profiles/';
+let BASE_POST_IMAGE_URL='http://localhost:4000/public/uploads/posts/';
+
+if(AWS_S3){
+    BASE_PROFILE_IMAGE_URL='';
+    BASE_POST_IMAGE_URL='';
+}
+
+export {BASE_PROFILE_IMAGE_URL,BASE_POST_IMAGE_URL};
 export const SOCKET_ENDPOINT = "http://localhost:4000";
 
 // export const BASE_PROFILE_IMAGE_URL = 'https://instagrammern.herokuapp.com/public/uploads/profiles/';
 // export const BASE_POST_IMAGE_URL = 'https://instagrammern.herokuapp.com/public/uploads/posts/';
-
 // export const SOCKET_ENDPOINT = "https://instagrammern.herokuapp.com";
 
 export const stories = [

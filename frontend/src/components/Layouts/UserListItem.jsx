@@ -3,7 +3,7 @@ import { BASE_PROFILE_IMAGE_URL } from '../../utils/constants'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 
-function UserListItem({_id,avatar,username,name,isPageOfLogginUser}) {
+function UserListItem({_id,avatar,username,name,isPageOfLogginUser,onClose}) {
     const loginUser = useSelector((state)=>state.user.user);
     const isFollowing = loginUser.following.includes(_id);
     const handleFollow=()=>{};
@@ -14,7 +14,7 @@ function UserListItem({_id,avatar,username,name,isPageOfLogginUser}) {
             <img className="w-11 h-11 rounded-full object-cover" src={BASE_PROFILE_IMAGE_URL + avatar} alt="avatar" />
             <div className="flex flex-col items-start">
             <Link to={`/${username}`}>
-                <span className="text-black text-sm font-semibold cursor-pointer">{username}</span>
+                <span className="text-black text-sm font-semibold cursor-pointer" onClick={()=>onClose()}>{username}</span>
             </Link>
                 <span className="text-gray-400 text-sm">{name}</span>
             </div>
@@ -22,7 +22,7 @@ function UserListItem({_id,avatar,username,name,isPageOfLogginUser}) {
         <div>
         {isFollowing?
             <button 
-            className="rounded-lg py-2 px-4 bg-gray-200 hover:bg-gray-300"
+            className="font-semibold rounded-lg py-1.5 px-4 bg-gray-200 hover:bg-gray-300"
             onClick={handleUnfollow}>Unfollow</button>
             :
             <button 

@@ -1,12 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { addPhoto, audioCallIcon, chatIcon, emojiIcon, infoIcon, likeOutline, videoCallIcon, voiceClipIcon } from '../Navbar/SvgIcons'
 import sampleAvatar from "../Navbar/logo192.png"
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data'
 import Sidebar from './Sidebar';
 import { io } from "socket.io-client";
-import { SOCKET_ENDPOINT } from '../../utils/constants';
+import { BASE_PROFILE_IMAGE_URL, SOCKET_ENDPOINT } from '../../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { ALL_MESSAGES_ADD } from '../../reducers/messageReducers';
 import { addNewMessage, getAllMessages } from '../../actions/messageAction';
@@ -246,16 +246,18 @@ function Inbox() {
                 <div className="w-2/3 h-full flex flex-col">
                     {/* Header */}
                     <div className="flex flex-row justify-between items-center  border-b px-5 py-4">
+                        <Link to={`/${friendInfo.username}`} target={"_blank"}>
                         <div className="flex flex-row items-center">
-                            <div className="relative mr-3">
-                                <img className="w-11 h-11 rounded-full ojbect-cover" src={sampleAvatar} alt="avatar" />
-                                <div className="w-3 h-3 rounded-full bg-green-500 absolute right-0 bottom-0 z-10 border-2 border-white"></div>
+                            <div className="relative mr-3 cursor-pointer">
+                                <img className="w-11 h-11 rounded-full object-cover" src={BASE_PROFILE_IMAGE_URL+friendInfo.avatar} alt="avatar" />
+                                <div className="w-3 h-3 rounded-full bg-green-500 absolute right-0 bottom-0 border-2 border-white"></div>
                             </div>
                             <div className="flex flex-col justify-center items-start">
                                 <p className="text-base font-bold">{friendInfo.name}</p>
                                 {isOnline && <p className="text-xs text-gray-500"> Active now</p>}
                             </div>
                         </div>
+                        </Link>
                         <div className="flex flex-row space-x-4">
                             <div className="cursor-pointer">{audioCallIcon}</div>
                             <div className="cursor-pointer">{videoCallIcon}</div>
@@ -265,10 +267,12 @@ function Inbox() {
                     {/* Dialogue Display */}
                     <div style={{ flex: "6" }} className="overflow-y-scroll">
                         <div class="flex flex-col items-center py-6">
-                            <img class="w-24 h-24 rounded-full mb-3" src={sampleAvatar} alt="avatar" />
+                            <img class="w-24 h-24 rounded-full object-cover mb-3" src={BASE_PROFILE_IMAGE_URL+friendInfo.avatar} alt="avatar" />
                             <p class="text-xl font-semibold">{friendInfo.name}</p>
                             <p class="text-gray-600 text-sm">{friendInfo.username} • Instagram</p>
-                            <button class="bg-gray-100 rounded-lg py-1 px-2 mt-6">View profile</button>
+                            <Link to={`/${friendInfo.username}`}>
+                                <button class="bg-gray-100 rounded-lg py-1 px-2 mt-6">View profile</button>
+                            </Link>
                         </div>
                         
                         {

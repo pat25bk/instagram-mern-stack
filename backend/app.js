@@ -4,11 +4,12 @@ const User = require("../backend/models/userModel");
 const CustomError = require("./utils/errorHandler");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
 const PORT = process.env.PORT || 4000;
 require("dotenv").config(); // To access variable in .env file
 // Establish connection to Database
-// console.log(process.env.MONGO_URI)
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+const dbURL= process.env.ATLAS_ENABLE==='true'?process.env.ATLAS_URL:process.env.MONGO_URI;
+mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log("Connected to MongoDB"))
     .catch((error) => console.log(error))
 
@@ -24,6 +25,8 @@ app.use(cors({
     credentials: true, // You may need this if you are using cookies or sessions
   }));
 
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute");
 const chatRoute = require("./routes/chatRoute");
@@ -36,23 +39,13 @@ app.use("/api/chat", chatRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/post",postRoute);
 
-function mw1(res, req, next) {
-    try {
-        console.log("Invoke 1st middleware");
-        next();
-    } catch (err) {
-        next(err);
-    }
-}
-function mw2(err, res, req, next) {
-    console.log("Invoke 2nd middleware");
-    console.log(err.message)
-    next();
-}
-
-app.get("/", mw1, mw2, (req, res, next) => {
+app.get("/", (req, res, next) => {
     res.send("Hello World");
 })
+
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+});
 
 const server = app.listen(PORT, () => console.log("Server is running on port ",PORT));
 
@@ -84,7 +77,7 @@ io.on("connection", (socket) => {
     socket.on("addUser", (userId) => {
         addUser(userId,socket.id);
         io.emit("getUsers", users);
-        console.log(users);
+        console.log("User List After Add Users:",users);
     })
 
     socket.on("sendMessage",({senderId, receiverId, content})=>{

@@ -2,9 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { BASE_PROFILE_IMAGE_URL } from '../../../utils/constants'
 
-const SearchUserItem = ({ _id, username, name, avatar }) => {
+const SearchUserItem = ({ _id, username, name, avatar, onClose }) => {
     return (
-        <Link to={`/${username}`} className="flex items-center hover:bg-gray-50 py-2 px-4 cursor-pointer">
+        // <Link to={`/${username}`}>
+        <div className="flex items-center hover:bg-gray-50 py-2 px-4 cursor-pointer"
+        onClick={()=>onClose(username)}>
             <div className="flex space-x-3 items-center">
                 <img className="w-11 h-11 rounded-full object-cover" src={BASE_PROFILE_IMAGE_URL + avatar} alt="avatar" />
                 <div className="flex flex-col items-start">
@@ -12,7 +14,8 @@ const SearchUserItem = ({ _id, username, name, avatar }) => {
                     <span className="text-gray-400 text-sm">{name}</span>
                 </div>
             </div>
-        </Link>
+        </div>
+        // </Link>
     )
 }
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { chatIcon, commentFillIcon, likeFill, likeFillWhite, messageFill, postsIcon, reelsIcon, settingsIcon, taggedIcon } from '../Navbar/SvgIcons'
+import { chatIcon, commentFillIcon, likeFill, likeFillWhite, messageFill, postsIcon, reelsIcon, savedIcon, settingsIcon, taggedIcon } from '../Navbar/SvgIcons'
 import InfiniteScroll from "react-infinite-scroll-component";
 import SpinLoader from '../Layouts/SpinLoader';
 import { CircularProgress } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axiosInstance from '../../axiosInit';
 import { fetchUserDetails, reloadUser } from '../../actions/userAction';
@@ -14,12 +14,14 @@ import {toast} from "react-toastify";
 import { ToastContainer } from 'react-toastify';
 import { USER_DETAILS_CLEAR_ERROR } from '../../reducers/userReducers';
 import UsersModal from './UsersModal';
-import { BASE_POST_IMAGE_URL } from '../../utils/constants';
+import { BASE_POST_IMAGE_URL, BASE_PROFILE_IMAGE_URL } from '../../utils/constants';
+import PostGridItem from './PostGridItem';
+import NotFound from '../Layouts/NotFound';
 
 
 function Profile() {
     const posts = Array(9).fill("");
-    const [subRoute, setSubroute] = useState("posts");
+    const [tab, setTab] = useState("posts");
     const params = useParams();
     const currentUsername = params.username;
     const loginUser = useSelector((state)=>state.user.user);
@@ -60,9 +62,14 @@ function Profile() {
 
     const CatItem = ({ name, title, icon }) => {
         return <div
-            onClick={() => setSubroute(name)}
-            className={`py-4 cursor-pointer flex items-center space-x-2
-    ${subRoute === name ? "opacity-100 border-t border-black" : "opacity-50"}`}>
+            onClick={() => setTab(name)}
+            className={`
+            cursor-pointer 
+            flex items-center 
+            space-x-2 py-3 h-full
+            relative
+            -top-[1px]
+    ${tab === name ? "opacity-100 border-t border-black" : "opacity-50"}`}>
             {icon} <span>{title}</span>
         </div>
     }
@@ -134,8 +141,8 @@ function Profile() {
     }
 
     console.log("followStatus:",followStatus)
-
-
+    console.log("tab:",tab);
+    console.log(currentUsername,loginUser.currentUsername)
     return (
         <>
         <SEO title={`${user?.name} (@${user?.username}) • Instagram photos and videos`}/>
@@ -145,16 +152,18 @@ function Profile() {
         {user?
         <div className="flex justify-center mt-14">
             {/* <CircularProgress color="inherit" /> */}
-            <div className="w-full lg:w-[75%]">
-                <div className="flex justify-center items-start border-b border-gray-200 py-5">
+            <div className="w-full lg:w-[75%] xl:w-[55%]">
+                <div className="flex justify-center items-start py-5">
                     <div>
-                        <img className="w-[150px] h-[150px] bg-gray-300 rounded-full" src="" alt="avatar" />
+                        <img className="w-[150px] h-[150px] bg-gray-300 rounded-full object-cover" src={BASE_PROFILE_IMAGE_URL+user.avatar} alt="avatar" />
                     </div>
                     <div className='flex flex-col items-left ml-20 space-y-5'>
                         {currentUsername===loginUser.username?
                             <div className="flex items-center space-x-2">
                             <span className="text-lg">{currentUsername}</span>
+                            <Link to="/accounts/edit">
                             <button className="bg-gray-200 font-semibold text-sm py-1.5 px-4 rounded-lg hover:bg-gray-300">Edit profile</button>
+                            </Link>
                             <button className="bg-gray-200 font-semibold text-sm py-1.5 px-4 rounded-lg  hover:bg-gray-300">View Archive</button>
                             <span>{settingsIcon}</span>
                         </div>
@@ -206,37 +215,32 @@ function Profile() {
                     userList={user.followers}
                 />
 
-                <div className="border-t border-gray-300 mt-5">
-                    <div className="flex justify-center space-x-14 text-[12px] font-semibold">
-                        <CatItem name="posts" title="POSTS" icon={postsIcon} />
-                        <CatItem name="reels" title="REELS" icon={reelsIcon} />
-                        <CatItem name="tagged" title="TAGGED" icon={taggedIcon} />
+
+
+                {/* POST GALLERY */}
+                <div className="mt-5">
+                    <div className="flex justify-center space-x-14 text-[12px] font-semibold border-t border-gray-300 box-border relative">
+                        <CatItem name="posts" title="POSTS" icon={postsIcon}/>
+                        {currentUsername===loginUser.username?                      
+                        <CatItem name="saved" title="SAVED" icon={savedIcon}/>
+                        :
+                        <CatItem name="reels" title="REELS" icon={reelsIcon}/>
+                        }
+                        <CatItem name="tagged" title="TAGGED" icon={taggedIcon}/>
                     </div>
                     {/* <div className="grid grid-cols-3 gap-1"> */}
                     <InfiniteScroll
                         dataLength={user.posts.length}
                         next={fetchMoreData}
-                        hasMore={true}
+                        hasMore={false}
                         loader={<div className="flex justify-center items-center"><SpinLoader /></div>}
                         className="grid grid-cols-3 gap-1">
-                        {user.posts.map((p) => (
-                            <div className="relative w-full aspect-square bg-yellow-500">
-                                <img className="w-full h-full object-cover" src={BASE_POST_IMAGE_URL+p.image} alt="post"/>
-                                <div className="absolute top-0 w-full h-full bg-black/25 opacity-0 hover:opacity-100
-                                flex justify-center items-center space-x-8
-                                font-bold text-white text-lg
-                                ">
-                                    <div className="flex space-x-2 items-center">
-                                        {likeFillWhite}
-                                        <span> 1000</span>
-                                    </div>
-                                    <div className="flex space-x-2 items-center ">
-                                        {commentFillIcon}
-                                        <span>20</span></div>
-                                </div>
-                            </div>
-                        )
-                        )}
+                        {tab==="saved"?
+                        user.saved.map((p) => 
+                        <PostGridItem id={p._id} postData={p}/>)
+                        :user.posts.map((p) => 
+                        <PostGridItem id={p._id} postData={p}/>)
+                        }
                     </InfiniteScroll>
                     {/* </div> */}
                 </div>
@@ -254,8 +258,8 @@ function Profile() {
                 </div>
 
             </div>
-        </div>:
-        <div>Not Found</div>
+        </div>
+        :<NotFound/>
         }
         </>
     )

@@ -1,13 +1,13 @@
 const Post = require("../models/postModel");
 const User = require("../models/userModel");
+const {delelteFile} = require("../utils/awsFunctions");
 
 exports.newPost = async(req,res,next)=>{
     const postData = {
         caption:req.body.caption,
-        image:req.file.filename,
-        postedBy:req.user._id
+        postedBy:req.user._id,
+        image:process.env.AWS_ENABLE==='true'?req.file.location:req.file.filename
     }
-
     // console.log(req.file);
 
     const post = await Post.create(postData);
@@ -78,7 +78,11 @@ exports.newComment = async(req,res,next)=>{
 
         await post.save();
 
-        return res.status(200).json("New Comment Added!");
+        return res.status(200).json(
+            {
+                success:true,
+                message:"New Comment Added!"
+            });
     }else{
         return res.status(404).json("No Post Found!");
     }

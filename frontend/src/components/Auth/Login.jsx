@@ -95,7 +95,10 @@ function Login() {
           </div>
 
           <div className="border border-gray-300 text-center py-5 w-full">
-            <p>Don't have an account? <strong>Sign up</strong></p>
+            <span>Don't have an account?</span>
+            <Link to="/signup">
+            <span className="font-semibold text-primary-blue ml-1 hover:text-blue-800 cursor-pointer">Sign up</span>
+            </Link>
           </div>
 
           <div>

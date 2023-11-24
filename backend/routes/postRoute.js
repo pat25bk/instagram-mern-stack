@@ -6,6 +6,7 @@ const multer = require("multer");
 const path = require("path");
 const { newPost, getAllPosts, getPostsOfFollowing, getPostDetails, newComment, deletePost, likePost, unlikePost } = require("../routeHandlers/postRouteHandlers");
 const router = express.Router();
+const {awsDeleteFile,awsUploadPost} = require("../utils/awsFunctions");
 
 //Initilize storage engine for post images
 const postStorage = multer.diskStorage({
@@ -23,7 +24,7 @@ const postUpload = multer({
 });
 
 // Create new post
-router.post("/",isAuthenticated, postUpload.single("post"), catchAsync(newPost));
+router.post("/",isAuthenticated, awsUploadPost.single("post"), catchAsync(newPost));
 
 // Get all user's post for profile page 
 router.get("/posts/all",isAuthenticated,catchAsync(getAllPosts))

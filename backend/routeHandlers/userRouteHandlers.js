@@ -1,5 +1,21 @@
 const User = require("../models/userModel");
 const sendCookie = require("../utils/sendCookie");
+const multer = require("multer");
+
+const avatarStorage = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,path.resolve(__dirname,"../public/upload/profiles/"));
+    },
+    filename:function(req,file,cb){
+        const uniqueSuffix = Data.now()+'-'+Math.round(Math.random()*1e9);
+        cb(null,file.fieldname +'_'+ uniqueSuffix + path.extname(file.originalname))
+    }
+})
+
+const avatarUpload = multer({
+    storage: avatarStorage,
+    limit: { fileSize: 1000000 * 10 }
+});
 
 //Search Users
 exports.searchUsers = async(req,res,next)=>{
@@ -116,9 +132,59 @@ exports.getUserDetails = async(req,res,next)=>{
         populate: {
             path: 'postedBy'
     }})
-
+    if(user){
     return res.status(200).json({
         success:true,
         user
+    })}
+    else{
+        return res.status(404).json("User Not Found");
+    }
+}
+
+exports.savePost = async(req,res,next)=>{
+    const user = await User.findById(req.user._id);
+    if(user.saved.includes(req.params.postId)){
+        return res.status(200).json({
+            success:true,
+            message:"Post Already Saved"
+        })
+    }
+    else{
+        user.saved.push(req.params.postId);
+        await user.save();
+        return res.status(200).json({
+            success:true,
+            message:"Post Saved"
+        })
+    }
+}
+
+exports.unsavePost = async(req,res,next)=>{
+    const user = await User.findById(req.user._id);
+    if(user.saved.includes(req.params.postId)){
+        const index = user.saved.indexOf(req.params.postId);
+        user.saved.splice(index,1);
+        await user.save();
+        return res.status(200).json({
+            success:true,
+            message:"Post Unsaved"
+        })
+    }
+    else{
+        return res.status(200).json({
+            success:true,
+            message:"Post Already Unsaved"
+        })
+    }
+}
+
+exports.updateProfile=async(req,res,next)=>{
+    const user = await User.findById(req.user._id);
+    user.bio = req.body.bio;
+    await user.save();
+    res.status(200).json({
+        success:true,
+        message:"Profile Updated"
     })
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Skeleton } from '@mui/material';
 import { useSelector } from 'react-redux';
+import { BASE_PROFILE_IMAGE_URL } from '../../utils/constants';
 
 function SideBar() {
   const [loading, setLoading] = useState(true);
@@ -9,10 +10,10 @@ function SideBar() {
   const suggestedUsers = Array(5).fill("");
   return (
     // <div className="border border-red-700 fixed lg:right-32 xl:right-56 w-3/12 h-full hidden lg:flex flex-col flex-auto m-8 mt-12 pr-8 z-1">
-    <div className="border border-red-700 sm:hide lg:w-1/3">
+    <div className="sm:hide lg:w-1/3">
 
       <div className="flex items-center mb-3">
-        <div><img className="w-11 h-11 rounded-full border border-gray-500" src={loginUser.avatar} alt="avatar" /></div>
+        <div><img className="w-11 h-11 rounded-full border border-gray-500 object-cover" src={BASE_PROFILE_IMAGE_URL+ loginUser.avatar} alt="avatar" /></div>
         <div className="flex-1 text-left pl-4">
           <p className="text-sm font-semibold cursor-pointer">{loginUser.username}</p>
           <p className="text-xs text-gray-500">{loginUser.name}</p>
@@ -39,7 +40,7 @@ function SideBar() {
           :
           suggestedUsers.map((e, i) =>
             <div className="flex items-center mb-3">
-              <div><img className="w-11 h-11 rounded-full border border-gray-500" src="" alt="avatar" /></div>
+              <div><img className="w-11 h-11 rounded-full border border-gray-500 object-cover" src={BASE_PROFILE_IMAGE_URL+""} alt="avatar" /></div>
               <div className="flex-1 text-left pl-4">
                 <p className="text-sm font-semibold cursor-pointer">Username</p>
                 <p className="text-xs text-gray-500">Info</p>

@@ -4,6 +4,8 @@ const catchAsync = require("../utils/catchAsync");
 const sendCookie = require("../utils/sendCookie");
 const multer = require("multer");
 const path = require("path");
+const { findById } = require("../models/postModel");
+const deleteFile = require("../utils/deleteFile");
 
 exports.isAuthenticated = catchAsync(async(req,res,next)=>{
     // console.log(req.cookies);
@@ -33,7 +35,7 @@ exports.signupHandler = async(req,res,next)=>{
         password,
     })
 
-    res.status(200).json(newUser)
+    sendCookie(newUser,201,res);
 }
 
 exports.loginHandler = async(req,res,next)=>{
@@ -58,4 +60,57 @@ exports.loginHandler = async(req,res,next)=>{
     
     // res.status(200).json(user);
     sendCookie(user,200,res);
+}
+
+exports.logoutHandler=async(req,res,next)=>{
+    res.cookie('token',null,{
+        expires:new Date(Date.now()),
+        httpOnly:true
+    })
+
+    res.status(200).json({
+        success:true,
+        message:"Logged Out"
+    })
+}
+exports.updateProfile=async(req,res,next)=>{
+    const user = await User.findById(req.user._id);
+    const {name,username,email,website,bio} = req.body;
+    const newUserData={
+        name,
+        username,
+        email,
+        website,
+        bio
+    }
+
+    const existUser = await User.findOne({
+        $or:[{email,username}]
+    })
+
+    
+    if(existUser&&(existUser._id.toString()!==req.user._id.toString())){
+        return res.status(404).json("Username or Email Already Used")
+    }
+
+    if(req.file){
+        // console.log("file",user.avatar);
+        if(user.avatar&&user.avatar!=""){
+            await deleteFile('profiles/',user.avatar);
+        }
+        newUserData.avatar = process.env.AWS_ENABLE==='true'?req.file.location:req.file.filename;
+        // console.log(req.file.filename);
+        // console.log(req.file.location);
+    }
+
+    await User.findByIdAndUpdate(req.user._id,newUserData,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:true
+    })
+
+    return res.status(200).json({
+        sucess:true,
+        message:"Profile Updated"
+    })
 }
