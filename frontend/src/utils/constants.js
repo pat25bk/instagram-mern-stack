@@ -1,7 +1,17 @@
 const AWS_S3=true;
+const EC2_DEPLOY=true;
 
-let BASE_PROFILE_IMAGE_URL='http://localhost:4000/public/uploads/profiles/';
-let BASE_POST_IMAGE_URL='http://localhost:4000/public/uploads/posts/';
+let BASE_PROFILE_IMAGE_URL='';
+let BASE_POST_IMAGE_URL='';
+
+if(EC2_DEPLOY){
+    BASE_PROFILE_IMAGE_URL='http://localhost:4000/public/uploads/profiles/';
+    BASE_POST_IMAGE_URL='http://localhost:4000/public/uploads/posts/';
+}
+else{
+    BASE_PROFILE_IMAGE_URL='http://54.92.219.74:8080/public/uploads/profiles/';
+    BASE_POST_IMAGE_URL='http://54.92.219.74:8080/public/uploads/posts/';
+}
 
 if(AWS_S3){
     BASE_PROFILE_IMAGE_URL='';
@@ -9,7 +19,7 @@ if(AWS_S3){
 }
 
 export {BASE_PROFILE_IMAGE_URL,BASE_POST_IMAGE_URL};
-export const SOCKET_ENDPOINT = "http://localhost:4000";
+export const SOCKET_ENDPOINT = EC2_DEPLOY?'http://54.92.219.74:8080':"http://localhost:4000";
 
 // export const BASE_PROFILE_IMAGE_URL = 'https://instagrammern.herokuapp.com/public/uploads/profiles/';
 // export const BASE_POST_IMAGE_URL = 'https://instagrammern.herokuapp.com/public/uploads/posts/';

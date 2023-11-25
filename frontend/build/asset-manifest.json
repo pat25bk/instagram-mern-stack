@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.d7a12878.css",
-    "main.js": "/static/js/main.0d5ab320.js",
+    "main.js": "/static/js/main.5095ae7b.js",
     "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
     "static/media/signup-cover.png": "/static/media/signup-cover.998825f016b0fcabaf6b.png",
     "static/media/Instagram_logo.svg.png": "/static/media/Instagram_logo.svg.d8adb1d5a0de68b27d81.png",
@@ -12,11 +12,11 @@
     "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
     "index.html": "/index.html",
     "main.d7a12878.css.map": "/static/css/main.d7a12878.css.map",
-    "main.0d5ab320.js.map": "/static/js/main.0d5ab320.js.map",
+    "main.5095ae7b.js.map": "/static/js/main.5095ae7b.js.map",
     "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d7a12878.css",
-    "static/js/main.0d5ab320.js"
+    "static/js/main.5095ae7b.js"
   ]
 }
