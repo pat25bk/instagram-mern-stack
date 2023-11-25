@@ -5,8 +5,9 @@ const CustomError = require("./utils/errorHandler");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const path = require("path");
-const PORT = process.env.PORT || 4000;
 require("dotenv").config(); // To access variable in .env file
+
+const PORT = process.env.PORT || 4000;
 // Establish connection to Database
 const dbURL= process.env.ATLAS_ENABLE==='true'?process.env.ATLAS_URL:process.env.MONGO_URI;
 mongoose.connect(dbURL, { useNewUrlParser: true, useUnifiedTopology: true })
