@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.d7a12878.css",
+    "main.js": "/static/js/main.0d5ab320.js",
+    "static/js/787.cda612ba.chunk.js": "/static/js/787.cda612ba.chunk.js",
+    "static/media/signup-cover.png": "/static/media/signup-cover.998825f016b0fcabaf6b.png",
+    "static/media/Instagram_logo.svg.png": "/static/media/Instagram_logo.svg.d8adb1d5a0de68b27d81.png",
+    "static/media/facebook-logo-png-2320.png": "/static/media/facebook-logo-png-2320.9a6947cd0d1fe7cdee01.png",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.d7a12878.css.map": "/static/css/main.d7a12878.css.map",
+    "main.0d5ab320.js.map": "/static/js/main.0d5ab320.js.map",
+    "787.cda612ba.chunk.js.map": "/static/js/787.cda612ba.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d7a12878.css",
+    "static/js/main.0d5ab320.js"
+  ]
+}
